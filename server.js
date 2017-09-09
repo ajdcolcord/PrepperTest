@@ -115,8 +115,8 @@ app.use(session({
     cookie: { maxAge: maxAge }
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 initDb(function(err){
   console.log('Error connecting to Mongo. Message:\n'+err);
