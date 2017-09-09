@@ -1,12 +1,13 @@
 //  OpenShift sample Node application
-var express = require('express'),
-    app     = express(),
-    morgan  = require('morgan');
+var express  = require('express'),
+    app      = express(),
+    morgan   = require('morgan'),
+    mongoose = require('mongoose');
     
-Object.assign=require('object-assign')
+Object.assign=require('object-assign');
 
 app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
+app.use(morgan('combined'));
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -18,7 +19,7 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
       mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
       mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'],
       mongoDatabase = process.env[mongoServiceName + '_DATABASE'],
-      mongoPassword = process.env[mongoServiceName + '_PASSWORD']
+      mongoPassword = process.env[mongoServiceName + '_PASSWORD'],
       mongoUser = process.env[mongoServiceName + '_USER'];
 
   if (mongoHost && mongoPort && mongoDatabase) {
@@ -41,7 +42,7 @@ var initDb = function(callback) {
   var mongodb = require('mongodb');
   if (mongodb == null) return;
 
-  mongodb.connect(mongoURL, function(err, conn) {
+  mongoose.connect(mongoURL, function(err, conn) {
     if (err) {
       callback(err);
       return;
