@@ -1,0 +1,90 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top"
+         ng-class="model.user.manager && 'ajc-manager' || ''">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a ng-if="model.user.manager"
+                   class="navbar-brand">
+                    Manager Profile
+                </a>
+                <a ng-if="!model.user.manager"
+                   class="navbar-brand">
+                    Profile
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+    <div ng-if="model.error"
+         class="alert alert-danger"
+         role="alert">
+        {{model.error}}
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <div>
+                <h5>
+                    {{model.user.firstName}}
+                    {{model.user.lastName}}
+                    <i ng-if="model.user.google.id"
+                       class="fa fa-google-plus pull-right"
+                       aria-hidden="true"></i>
+                </h5>
+            </div>
+            <hr>
+            <h6><b>Username</b>: {{model.user.username}}</h6>
+            <h6><b>Email</b>: {{model.user.email}}</h6>
+            <h6><b>Restaurant ID</b>: {{model.user.restaurantId}}</h6>
+            <hr>
+        </div>
+
+        <div ng-if="model.user.manager"
+             class="col-sm-8">
+            <h5>Employees</h5>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Active</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="employee in model.employees">
+                            <td>{{employee.firstName}} {{employee.lastName}}</td>
+                            <td>{{employee.username}}</td>
+                            <td>{{employee.email}}</td>
+                            <td>
+                                <span ng-if="employee.active">Yes</span>
+                                <span ng-if="!employee.active">No</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+        </div>
+    </div>
+
+
+    <a  class="btn btn-block btn-primary"
+        href="#/user/{{model.user._id}}/edit">
+        <span ng-if="!model.user.manager">Edit Profile</span>
+        <span ng-if="model.user.manager">Edit Profile / Access</span>
+    </a>
+
+    <a  class="btn btn-block btn-danger"
+        ng-click="model.logout()">
+        Logout
+    </a>
+
+</div>
+
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

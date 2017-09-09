@@ -1,0 +1,108 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top"
+         ng-class="model.user.manager && 'ajc-manager' || ''">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a ng-if="!model.user.manager"
+                   class="navbar-brand">
+                    Timers
+                </a>
+                <a ng-if="model.user.manager"
+                   class="navbar-brand">
+                    All Timers
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+    <div ng-if="model.initialized">
+        <div ng-if="model.error"
+             class="alert alert-danger"
+             role="alert">
+            {{model.error}}
+        </div>
+
+        <div ng-if="!model.user.active && model.unlocked"
+             class="alert alert-danger"
+             role="alert">
+            Please ask your restaurant manager to activate your account to view timers
+        </div>
+    </div>
+
+    <div ng-if="model.unlocked && model.user.active">
+        <div class="row">
+            <div class="col-sm-4">
+                <ul class="list-group">
+                    <li ng-repeat="timer in model.timers"
+                        ng-if="model.testGetTimeRemaining(timer.timeEnd)[1] == 'r'"
+                        class="list-group-item ajc-timer-danger">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a  href="#/user/{{model.uid}}/recipe/{{timer._recipe}}">
+                                    <b class="ajc-wrap">{{timer.name}}</b>
+                                </a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="#user/{{model.uid}}/prep/timer-list">
+                                    <span ng-click="model.deleteTimer(timer._id)"
+                                          class="glyphicon glyphicon-trash pull-right"></span>
+                                </a>
+                                <p><b>{{model.testGetTimeRemaining(timer.timeEnd)[0]}}</b></p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <ul class="list-group">
+                    <li ng-repeat="timer in model.timers"
+                        ng-if="model.testGetTimeRemaining(timer.timeEnd)[1] == 'g'"
+                        class="list-group-item ajc-timer-warning">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a  href="#/user/{{model.uid}}/recipe/{{timer._recipe}}">
+                                    <b class="ajc-wrap">{{timer.name}}</b>
+                                </a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="#user/{{model.uid}}/prep/timer-list">
+                                    <span ng-click="model.deleteTimer(timer._id)"
+                                          class="glyphicon glyphicon-trash pull-right ajc-list-glyphicon"></span>
+                                </a>
+                                <p><b>{{model.testGetTimeRemaining(timer.timeEnd)[0]}}</b></p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <ul class="list-group">
+                    <li ng-repeat="timer in model.timers"
+                        ng-if="model.testGetTimeRemaining(timer.timeEnd)[1] == 'w'"
+                        class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a  href="#/user/{{model.uid}}/recipe/{{timer._recipe}}">
+                                    <b class="ajc-wrap">{{timer.name}}</b>
+                                </a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="#user/{{model.uid}}/prep/timer-list">
+                                    <span ng-click="model.deleteTimer(timer._id)"
+                                          class="glyphicon glyphicon-trash pull-right ajc-list-glyphicon"></span>
+                                </a>
+                                <p><b>{{model.testGetTimeRemaining(timer.timeEnd)[0]}}</b></p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

@@ -1,0 +1,213 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top"
+         ng-class="model.user.manager && 'ajc-manager' || ''">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    Edit Profile
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+    <div ng-if="model.error"
+         class="alert alert-danger">
+        {{model.error}}
+    </div>
+
+    <form name="form" role="form">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input ng-model="model.user.firstName"
+                           ng-readonly="model.user.google.id"
+                           type="text"
+                           id="firstName"
+                           class="form-control"
+                           placeholder="first name"
+                           autocorrect="off"
+                           spellcheck="false"/>
+                </div>
+
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input ng-model="model.user.lastName"
+                           ng-readonly="model.user.google.id"
+                           type="text"
+                           id="lastName"
+                           class="form-control"
+                           placeholder="last name"
+                           autocorrect="off"
+                           spellcheck="false"/>
+                </div>
+
+                <div class="form-group"
+                     ng-class="{ 'has-error': form.email.$error.required && form.email.$dirty
+                                || form.email.$error.required && model.submitted
+                                || model.badEmail}">
+                    <label for="email">Email</label>
+                    <input ng-model="model.user.email"
+                           ng-readonly="model.user.google.id"
+                           type="email"
+                           id="email"
+                           name="email"
+                           class="form-control"
+                           placeholder="email address"
+                           autocorrect="off"
+                           autocapitalize="off"
+                           spellcheck="false"
+                           required/>
+                    <span ng-if="form.email.$error.required && form.email.$dirty
+                                    || form.email.$error.required && model.submitted
+                                    || model.badEmail"
+                          class="help-block">
+                        Valid email is required
+                    </span>
+                </div>
+
+
+                <div ng-if="!model.user.google.id"
+                     class="form-group"
+                     ng-class="{ 'has-error': form.password.$error.required && form.password.$dirty
+                                || form.password.$error.required && model.submitted }">
+                    <input ng-model="current_pass"
+                           name="password"
+                           type="password"
+                           class="form-control"
+                           placeholder="current password"
+                           required/>
+                    <span ng-if="form.password.$error.required && form.password.$dirty
+                                    || form.password.$error.required && model.submitted"
+                          class="help-block">
+                        Current password is required
+                    </span>
+                </div>
+
+                <div ng-if="!model.user.google.id"
+                     class="form-group"
+                     ng-class="{ 'has-error': form.newPassword.$error.required && form.newPassword.$dirty
+                                || form.newPassword.$error.required && model.submitted }">
+                    <input ng-model="new_pass"
+                           name="newPassword"
+                           type="password"
+                           class="form-control"
+                           placeholder="new password"
+                           required/>
+                    <span ng-if="form.newPassword.$error.required && form.newPassword.$dirty
+                                    || form.newPassword.$error.required && model.submitted"
+                          class="help-block">
+                        New password is required
+                    </span>
+                </div>
+
+                <div ng-if="!model.user.google.id"
+                     class="form-group"
+                     ng-class="{ 'has-error': form.verifyPassword.$error.required && form.verifyPassword.$dirty
+                                || form.verifyPassword.$error.required && model.submitted }">
+                    <input ng-model="verify_pass"
+                           name="verifyPassword"
+                           type="password"
+                           class="form-control"
+                           placeholder="verify new password"
+                           required/>
+                    <span ng-if="form.verifyPassword.$error.required && form.verifyPassword.$dirty
+                                    || form.verifyPassword.$error.required && model.submitted"
+                          class="help-block">
+                        Verify new password
+                    </span>
+                </div>
+
+                <div ng-if="!model.user.restaurantId"
+                     class="form-group">
+                    <input ng-model="model.newRestaurantId"
+                           type="number"
+                           id="restaurantId"
+                           class="form-control"
+                           autocorrect="off"
+                           placeholder="restaurant id"
+                           spellcheck="false"/>
+                </div>
+                <h6 ng-if="model.user.restaurantId">
+                    Restaurant ID: {{model.user.restaurantId}}
+                </h6>
+            </div>
+
+
+
+            <div class="col-sm-8"
+                 ng-if="model.user.manager">
+                <h5>Employees</h5>
+
+                <div class="ajc-white-background">
+                    <table class="table ajc-table-less-padding">
+                        <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Email</th>
+                            <th><span class="pull-right">Active</span></th>
+                        </tr>
+                        </thead>
+                    </table>
+
+                    <div class="row ajc-padded-left"
+                         ng-repeat="employee in model.employees">
+                        <div class="col-xs-5">
+                            <p class="ajc-wrap">{{employee.firstName}} {{employee.lastName}}</p>
+                        </div>
+                        <div class="col-xs-5">
+                            <p class="ajc-wrap">{{employee.email}}</p>
+                        </div>
+
+                        <div class="col-xs-2">
+                            <div class="checkbox ajc-checkbox pull-right">
+                                <switch id="enabled"
+                                        name="enabled"
+                                        ng-model="employee.active"
+                                        ng-change="model.activatedChanged(employee)"
+                                        ></switch>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <a  ng-if="!model.user.google.id"
+            class="btn btn-block btn-primary"
+            ng-click="model.updateUser(current_pass, new_pass, verify_pass)">
+            Update Profile
+        </a>
+
+        <a  ng-if="model.user.google.id && !model.user.restaurantId"
+            class="btn btn-block btn-primary"
+            ng-click="model.addRestaurantId(model.newRestaurantId)">
+            Add Restaurant ID
+        </a>
+
+        <a  ng-if="!(model.user.manager || (model.user.google.id && model.user.restaurantId))"
+            class="btn btn-block btn-warning"
+            href="#/user/{{model.user._id}}">
+            Cancel
+        </a>
+
+
+        <div ng-if="!(model.employees.length)">
+            <hr>
+
+            <a  ng-click="model.unRegister()"
+                class="btn btn-block btn-danger">
+                Delete Account
+            </a>
+        </div>
+
+    </form>
+</div>
+
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

@@ -1,0 +1,84 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top"
+         ng-class="model.user.manager && 'ajc-manager' || ''">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-text navbar-left pull-left navbar-button">
+                    <a href="#/user/{{model.uid}}/prep/prep-list"
+                       class="navbar-link">
+                        <span class="glyphicon glyphicon-chevron-left ajc-nav-glyphicon"></span>
+                    </a>
+                </p>
+                <a class="navbar-brand">
+                    Prep List History
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+    <div ng-if="model.initialized">
+        <div ng-if="model.error"
+             class="alert alert-danger"
+             role="alert">
+            {{model.error}}
+        </div>
+
+        <div ng-if="!model.user.active && model.unlocked"
+             class="alert alert-danger"
+             role="alert">
+            Please ask your restaurant manager to activate your account to view the prep list
+        </div>
+    </div>
+
+    <div ng-if="!model.deleted.length">
+        <h6>No deleted prep list items</h6>
+    </div>
+
+    <div ng-if="model.user.active">
+        <div class="form-group has-feedback">
+            <input type="text"
+                   ng-model="searchTerm"
+                   class="form-control"
+                   placeholder="Search for a ticket...">
+            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+        </div>
+
+        <h5>Deleted</h5>
+        <ul class="list-group prep-list-container">
+            <li ng-repeat="ticket in model.deleted"
+                class="list-group-item"
+                ng-if="(ticket.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+                        || searchTerm == ''
+                        || searchTerm == null)">
+                <b>{{ticket.quantity}}x - </b>
+                <a  href="#/user/{{model.uid}}/recipe/{{ticket._recipeId}}">
+                    <b class="ajc-wrap">{{ticket.name}}</b>
+                </a>
+                <span ng-if="ticket.important"
+                      class="glyphicon glyphicon-exclamation-sign pull-right ajc-list-glyphicon"></span>
+                <p><b>Started:</b> {{ticket.timeStamp | date: 'MMM d - h:mm:ss a'}}</p>
+                <p><b>Completed:</b> {{ticket.completeTime | date: 'MMM d - h:mm:ss a'}}</p>
+
+                <div>
+                    <p>
+                        <b>Users: </b>
+                        <span ng-repeat="username in ticket.users track by $index">
+                            {{username}}{{$last ? '' : ($index==Users.length-2) ? ' and ' : ', '}}
+                        </span>
+                    </p>
+                </div>
+
+                <div ng-if="recipe.notes">
+                    <p><b>Notes:</b> {{recipe.notes}}</p>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+</div>
+
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

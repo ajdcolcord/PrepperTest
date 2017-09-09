@@ -1,7 +1,11 @@
 //  OpenShift sample Node application
 var express  = require('express'),
     app      = express(),
-    morgan   = require('morgan');
+    morgan   = require('morgan'),
+    cookieParser = require('cookie-parser'),
+    session = require('express-session'),
+    bodyParser = require('body-parser'),
+    passport = require('passport');
     
 Object.assign=require('object-assign');
 
@@ -95,9 +99,31 @@ app.use(function(err, req, res, next){
   res.status(500).send('Something bad happened!');
 });
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(express.static(__dirname + '/public'));
+app.use(cookieParser());
+
+var numDaysValidLogin = 0.25;
+var maxAge = numDaysValidLogin * 24 * 60 * 60 * 1000;
+
+app.use(session({
+    secret: "TEST_SECRET",//process.env.SESSION_SECRET,
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: maxAge }
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 initDb(function(err){
   console.log('Error connecting to Mongo. Message:\n'+err);
 });
+
+var prepper = require('./prepper/app.js');
+prepper(app);
 
 app.listen(port, ip);
 console.log('Server running on http://%s:%s', ip, port);

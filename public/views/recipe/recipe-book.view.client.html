@@ -1,0 +1,122 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top"
+         ng-class="model.user.manager && 'ajc-manager' || ''">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    Recipe Book
+                </a>
+                <p ng-if="model.unlocked && model.user.active"
+                   class="navbar-text navbar-right navbar-button-big">
+                    <a ng-click="model.newRecipe()"
+                       class="navbar-link">
+                        <span ng-if="!model.loadingNew"
+                              class="btn btn-success pull-right ajc-nav-glyphicon ajc-new-recipe">New</span>
+                        <span ng-if="model.loadingNew"
+                           class="btn btn-success pull-right ajc-nav-glyphicon ajc-new-recipe">
+                            <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+                        </span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+    <div ng-if="model.initialized">
+        <div ng-if="model.error"
+             class="alert alert-danger"
+             role="alert">
+            {{model.error}}
+        </div>
+
+        <div ng-if="!model.user.active && model.unlocked"
+             class="alert alert-danger"
+             role="alert">
+            Please ask your restaurant manager to activate your account to view recipes
+        </div>
+    </div>
+
+    <!-- http://stackoverflow.com/questions/24682421/put-search-icon-near-textbox-using-bootstrap -->
+    <div ng-if="model.unlocked && model.user.active">
+        <div class="form-group has-feedback">
+            <input type="text"
+                   ng-model="searchTerm"
+                   class="form-control"
+                   placeholder="Search my recipes..."
+                   id="recipeSearchInput"
+                   ng-enter="model.hitSearch()">
+            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h5>Last 5 Days</h5>
+                <ul class="list-group">
+                    <li class="list-group-item"
+                        dir-paginate="recipe in model.recipeBook | orderBy: 'lastUsedDate': true | filter: model.recipeFilterRecent(searchTerm) | itemsPerPage: 5 "
+                        pagination-id="recentRecipes"
+                        ng-class="recipe.hidden ? 'hidden-recipe-list' : ''">
+                        <i ng-if="recipe.hidden"
+                           class="fa fa-lock hidden-recipe-lock"
+                           aria-hidden="true"></i>
+                        <a ng-click="model.addToPrepToDo(recipe)">
+                            <span ng-if="!recipe.added && !recipe.loading"
+                                  class="btn btn-warning glyphicon glyphicon-plus-sign pull-right ajc-list-glyphicon"></span>
+                            <span ng-if="!recipe.added && recipe.loading"
+                                  class="btn btn-warning pull-right ajc-list-glyphicon recipe-add-spin">
+                                <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+                            </span>
+                            <span ng-if="recipe.added"
+                                  class="btn btn-success glyphicon glyphicon-ok pull-right ajc-list-glyphicon"></span>
+                        </a>
+                        <a  href="#/user/{{model.uid}}/recipe/{{recipe._id}}">
+                            <b class="ajc-wrap">{{recipe.name}}</b>
+                        </a>
+                        <p class="pull-right recipeBookType">{{recipe.type}}</p>
+                    </li>
+                </ul>
+                <dir-pagination-controls pagination-id="recentRecipes"
+                                         max-size="5"
+                                         template-url="../directives/dirPagination.tpl.html"></dir-pagination-controls>
+            </div>
+
+            <div class="col-sm-6">
+                <h5>All</h5>
+                <ul class="list-group">
+                    <li class="list-group-item"
+                        dir-paginate="recipe in model.recipeBook | orderBy: 'name' | filter: model.recipeFilter(searchTerm) | itemsPerPage: 5 "
+                        pagination-id="allRecipes"
+                        ng-class="recipe.hidden ? 'hidden-recipe-list' : ''">
+                        <i ng-if="recipe.hidden"
+                           class="fa fa-lock hidden-recipe-lock"
+                           aria-hidden="true"></i>
+                        <a ng-click="model.addToPrepToDo(recipe)">
+                            <span ng-if="!recipe.added && !recipe.loading"
+                                  class="btn btn-warning glyphicon glyphicon-plus-sign pull-right ajc-list-glyphicon"></span>
+                            <span ng-if="!recipe.added && recipe.loading"
+                                  class="btn btn-warning pull-right ajc-list-glyphicon recipe-add-spin">
+                                <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+                            </span>
+                            <span ng-if="recipe.added"
+                                  class="btn btn-success glyphicon glyphicon-ok pull-right ajc-list-glyphicon"></span>
+                        </a>
+                        <a  href="#/user/{{model.uid}}/recipe/{{recipe._id}}">
+                            <b class="ajc-wrap">{{recipe.name}}</b>
+                        </a>
+                        <p class="pull-right recipeBookType">{{recipe.type}}</p>
+                    </li>
+                </ul>
+                <dir-pagination-controls pagination-id="allRecipes"
+                                         max-size="5"
+                                         template-url="../directives/dirPagination.tpl.html"></dir-pagination-controls>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

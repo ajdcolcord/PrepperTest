@@ -1,0 +1,137 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top"
+         ng-class="model.user.manager && 'ajc-manager' || ''">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-text navbar-left pull-left navbar-button">
+                    <a href="#/user/{{model.uid}}/recipe/recipe-book"
+                       class="navbar-link">
+                        <span class="glyphicon glyphicon-chevron-left ajc-nav-glyphicon"></span>
+                    </a>
+                </p>
+                <a class="navbar-brand">
+                    View Recipe
+                </a>
+                <p class="navbar-text navbar-left pull-right navbar-button">
+                    <a ng-click="model.addToPrepToDo()"
+                       class="navbar-link">
+                        <span ng-if="!model.addedToPrepToDo && !model.loading"
+                              class="glyphicon glyphicon-plus-sign ajc-nav-glyphicon"></span>
+                        <span ng-if="!model.addedToPrepToDo && model.loading"
+                              class="fa fa-circle-o-notch fa-spin fa-1x fa-fw ajc-nav-glyphicon"></span>
+                        <span ng-if="model.addedToPrepToDo && !model.loading"
+                              class="glyphicon glyphicon-ok pull-right ajc-nav-glyphicon ajc-check"></span>
+                    </a>
+                </p>
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+    <div ng-if="model.error"
+         class="alert alert-danger"
+         role="alert">
+        {{model.error}}
+    </div>
+
+    <h5 class="ajc-wrap">{{model.recipe.name}}</h5>
+    <div class="row">
+        <div ng-class="model.user.manager ? 'col-xs-4' : 'col-xs-6'">
+            <p><b>Prep Time (min):</b> {{model.recipe.prepTime}}</p>
+        </div>
+        <div ng-class="model.user.manager ? 'col-xs-4' : 'col-xs-6'">
+            <p><b>Type:</b> {{model.recipe.type}}</p>
+        </div>
+        <div ng-if="model.user.manager"
+             class="col-xs-4">
+            <p><b>Hidden:</b> {{model.recipe.hidden}}</p>
+        </div>
+    </div>
+    <p class="ajc-wrap">
+        {{model.recipe.description}}
+    </p>
+    <hr>
+
+    <div class="row">
+        <div class="col-sm-6">
+
+            <div class="row">
+                <div class="col-xs-8">
+                    <h5>Ingredients</h5>
+                </div>
+                <div class="col-xs-4">
+                    <div class="form-group">
+                        <label for="multiplier">Multiplier</label>
+                        <input ng-model="model.multiplier"
+                               type="number"
+                               min="0"
+                               id="multiplier"
+                               class="form-control"
+                               value="1"/>
+                    </div>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ingredient</th>
+                            <th>Amount</th>
+                            <th>Measure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="ingredient in model.recipe.ingredients">
+                            <td>{{ ingredient.name }}</td>
+                            <td><p ng-if="ingredient.amount">{{(ingredient.amount|number) * (model.multiplier|number)}}</p></td>
+                            <td>{{ ingredient.measure }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <hr>
+        </div>
+        <div class="col-sm-6">
+
+            <h5>Directions</h5>
+            <p class="ajc-directions">{{ model.recipe.directions }}</p>
+
+            <!--<div class="row">-->
+                <!--<div class="col-xs-6">-->
+                    <!--<label for="timer">Minutes: </label>-->
+                    <!--<input ng-model="newTimerTime"-->
+                           <!--id="timer"-->
+                           <!--type="number"-->
+                           <!--title="timer"-->
+                           <!--min="1"-->
+                           <!--class="form-control"-->
+                           <!--placeholder="2"/>-->
+                <!--</div>-->
+                <!--<div class="col-xs-6 ajc-add-timer">-->
+                    <!--<a  ng-click="model.addTimer(newTimerTime)"-->
+                        <!--class="btn btn-block btn-success">-->
+                        <!--Add Timer-->
+                        <!--<span ng-if="model.timerAdded"-->
+                              <!--class="glyphicon glyphicon-ok pull-right ajc-check"></span>-->
+                    <!--</a>-->
+                <!--</div>-->
+            <!--</div>-->
+
+
+            <hr>
+        </div>
+    </div>
+    <a  ng-if="model.user.manager"
+        class="btn btn-block btn-danger"
+        href="#/user/{{model.uid}}/recipe/{{model.rid}}/edit">
+        Edit Recipe
+    </a>
+
+</div>
+
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

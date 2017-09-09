@@ -1,0 +1,178 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top"
+         ng-class="model.user.manager && 'ajc-manager' || ''">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    Prep List
+                </a>
+                <p ng-if="model.user.manager"
+                   class="navbar-text navbar-right navbar-button-big">
+                    <a href="#/user/{{model.uid}}/prep/prep-list/history"
+                       class="navbar-link">
+                        <span ng-if="!model.loadingNew"
+                              class="btn btn-warning pull-right ajc-nav-glyphicon ajc-new-recipe">History</span>
+                        <span ng-if="model.loadingNew"
+                              class="btn btn-warning pull-right ajc-nav-glyphicon ajc-new-recipe">
+                            <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+                        </span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+
+    <div ng-if="model.initialized">
+        <div ng-if="model.error"
+             class="alert alert-danger"
+             role="alert">
+            {{model.error}}
+        </div>
+
+        <div ng-if="!model.user.active && model.unlocked"
+             class="alert alert-danger"
+             role="alert">
+            Please ask your restaurant manager to activate your account to view the prep list
+        </div>
+    </div>
+
+    <div ng-if="model.unlocked && model.user.active">
+        <div class="form-group has-feedback">
+            <input type="text"
+                   ng-model="searchTerm"
+                   class="form-control"
+                   placeholder="Search for a ticket...">
+            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <h5>To-Do</h5>
+                <ul class="list-group prep-list-container"
+                    ajc-sortable
+                    sorted="model.sorted(start, end)"
+                    data="model.prepList.toDo">
+                    <li ng-repeat="recipe in model.prepList.toDo | orderBy : 'order'"
+                        class="list-group-item"
+                        ng-if="(recipe.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+                                || searchTerm == ''
+                                || searchTerm == null)">
+                        <i ng-if="searchTerm == '' || searchTerm == null"
+                           class="fa fa-bars btn ajc-ticket-handle"
+                           aria-hidden="true"></i>
+                        <b>{{recipe.quantity}}x - </b>
+                        <a  href="#/user/{{model.uid}}/recipe/{{recipe._recipeId}}">
+                            <b class="ajc-wrap">{{recipe.name}}</b>
+                        </a>
+                        <span ng-if="recipe.important"
+                              class="glyphicon glyphicon-exclamation-sign pull-right ajc-list-glyphicon"></span>
+                        <span ng-if="!recipe.moving"
+                              ng-click="model.moveToInProgress(recipe, newNotes)"
+                              class="glyphicon glyphicon-arrow-right ajc-list-glyphicon pull-right"></span>
+                        <span ng-if="recipe.moving"
+                              class="ajc-list-glyphicon pull-right">
+                            <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+                        </span>
+                        <div>
+                            <div class="ajc-prep-signature">
+                                <input ng-model="newNotes"
+                                       type="text"
+                                       class="form-control"
+                                       id="toDoItemInput_{{$index}}"
+                                       placeholder="sign / notes"
+                                       ng-enter="model.addNotesToDo(recipe, newNotes, $index); newNotes = ''"/>
+                            </div>
+                            <div ng-if="recipe.notes">
+                                <hr>
+                                <p class="ajc-wrap">{{recipe.notes}}</p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-4">
+                <h5>In Progress</h5>
+                <ul class="list-group prep-list-container">
+                    <li ng-repeat="recipe in model.prepList.inProgress"
+                        class="list-group-item"
+                        ng-if="(recipe.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+                                || searchTerm == ''
+                                || searchTerm == null)">
+                        <span ng-if="!recipe.moving"
+                              ng-click="model.moveBackToToDo(recipe, newNotes)"
+                              class="glyphicon glyphicon glyphicon-arrow-left pull-left ajc-list-glyphicon"></span>
+                        <span ng-if="!recipe.moving"
+                              ng-click="model.moveToCompleted(recipe, newNotes)"
+                              class="glyphicon glyphicon glyphicon-arrow-right pull-right ajc-list-glyphicon"></span>
+                        <span ng-if="recipe.moving"
+                              class="ajc-list-glyphicon pull-right">
+                            <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+                        </span>
+                        <b>{{recipe.quantity}}x - </b>
+                        <a  href="#/user/{{model.uid}}/recipe/{{recipe._recipeId}}">
+                            <b class="ajc-wrap">{{recipe.name}}</b>
+                        </a>
+                        <hr>
+                        <span ng-if="recipe.important"
+                              class="glyphicon glyphicon-exclamation-sign pull-right ajc-list-glyphicon"></span>
+                        <p>Started: {{recipe.timeStamp | date: 'MMM d - h:mm:ss a'}}</p>
+                        <div class="ajc-prep-signature">
+                            <input ng-model="newNotes"
+                                   type="text"
+                                   class="form-control"
+                                   id="inProgressItemInput_{{$index}}"
+                                   placeholder="sign / notes"
+                                   ng-enter="model.addNotesInProgress(recipe, newNotes, $index); newNotes = ''"/>
+                        </div>
+                        <div ng-if="recipe.notes">
+                            <hr>
+                            <p class="ajc-wrap">{{recipe.notes}}</p>
+                        </div>
+
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-sm-4">
+                <h5>Completed</h5>
+                <ul class="list-group prep-list-container">
+                    <li ng-repeat="recipe in model.prepList.completed"
+                        class="list-group-item"
+                        ng-if="(recipe.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+                                || searchTerm == ''
+                                || searchTerm == null)">
+                        <b>{{recipe.quantity}}x - </b>
+                        <a href="#/user/{{model.uid}}/recipe/{{recipe._recipeId}}">
+                            <b class="ajc-wrap">{{recipe.name}}</b>
+                        </a>
+                        <span ng-if="recipe.important"
+                              class="glyphicon glyphicon-exclamation-sign pull-right ajc-list-glyphicon"></span>
+                        <span ng-if="!recipe.moving"
+                              ng-click="model.moveToDeleted(recipe)"
+                              class="glyphicon glyphicon-remove pull-right ajc-list-glyphicon"></span>
+                        <span ng-if="recipe.moving"
+                              class="ajc-list-glyphicon pull-right">
+                            <i class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+                        </span>
+                        <hr>
+                        <div class="ajc-prep-signature">
+                            <p class="ajc-wrap">{{recipe.notes}}</p>
+                        </div>
+                        <p>Started: {{recipe.timeStamp | date: 'MMM d - h:mm:ss a'}}</p>
+                        <p>Completed: {{recipe.completeTime | date: 'MMM d - h:mm:ss a'}}</p>
+                        <div ng-include
+                             src="'views/general/beer.html'"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

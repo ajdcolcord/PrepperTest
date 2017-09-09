@@ -1,0 +1,181 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-text navbar-left pull-left navbar-button">
+                    <a href="#/user/{{model.uid}}/recipe/{{model.rid}}"
+                       class="navbar-link">
+                        <span class="glyphicon glyphicon-chevron-left ajc-nav-glyphicon"></span>
+                    </a>
+                </p>
+                <a class="navbar-brand">
+                    Edit Recipe
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+    <div ng-if="model.error"
+         class="alert alert-danger"
+         role="alert">
+        {{model.error}}
+    </div>
+
+
+    <form name="form" role="form">
+        <div class="form-group"
+             ng-class="{ 'has-error': form.recipeName.$error.required && form.recipeName.$dirty || form.recipeName.$error.required && model.submitted}">
+            <div>
+                <div class="pull-right">
+                    <div class="checkbox pull-right ajc-checkbox">
+                        <switch id="hidden"
+                                name="hidden"
+                                ng-model="model.recipe.hidden"></switch>
+                    </div>
+                    <label class="pull-right">Hidden &nbsp;</label>
+                </div>
+
+                <div>
+                    <label for="recipename">Recipe Name</label>
+                    <input ng-model="model.recipe.name"
+                           name="recipeName"
+                           type="text"
+                           id="recipename"
+                           class="form-control"
+                           placeholder="Recipe name"
+                           required/>
+                    <span ng-if="form.recipeName.$error.required && form.recipeName.$dirty || form.recipeName.$error.required && model.submitted"
+                          class="help-block">
+                        Recipe is required
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea ng-model="model.recipe.description"
+                      rows="3"
+                      id="description"
+                      class="form-control ajc-light-border"
+                      placeholder="Lorem ipsum dolor sit amet..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select ng-model="model.recipe.type"
+                    class="form-control"
+                    id="type">
+                <option value="" disabled>Select a type</option>
+                <option value="soup">Soup</option>
+                <option value="sandwitch">Sandwich</option>
+                <option value="salad">Salad</option>
+                <option value="entree">Entree</option>
+                <option value="dessert">Dessert</option>
+                <option value="side">Side Dish</option>
+                <option disabled>──────────</option>
+                <option value="condiment">Condiment</option>
+                <option value="sauce">Sauce</option>
+                <option value="dressing">Dressing</option>
+                <option disabled>──────────</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="preptime">Prep Time (minutes)</label>
+            <input ng-model="model.recipe.prepTime"
+                   type="number"
+                   id="preptime"
+                   min="0"
+                   class="form-control"
+                   placeholder="prep time"/>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ingredient</th>
+                            <th>Amount</th>
+                            <th>Measure</th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <div ajc-sortable
+                     sorted="model.sorted(start, end)"
+                     data="model.recipe.ingredients">
+                    <div class="row"
+                         ng-repeat="ingredient in model.recipe.ingredients">
+                        <div class="col-xs-1">
+                            <i class="fa fa-bars btn ajc-ticket-handle pull-left ingredient-row-handle"
+                               aria-hidden="true"></i>
+                        </div>
+                        <div class="col-xs-3">
+                            <input ng-model="ingredient.name"
+                                   type="text"
+                                   class="form-control"
+                                   placeholder="name"/>
+                        </div>
+                        <div class="col-xs-3">
+                            <input ng-model="ingredient.amount"
+                                   type="number"
+                                   class="form-control"
+                                   placeholder="amount"/>
+                        </div>
+                        <div class="col-xs-3 ingredient-measurement-div">
+                            <input ng-model="ingredient.measure"
+                                   ng-enter="model.addIngredientRow()"
+                                   type="text"
+                                   class="form-control"
+                                   placeholder="measurement"/>
+                        </div>
+                        <div class="col-xs-2">
+                            <span ng-click="model.removeIngredient(ingredient._id)"
+                            class="btn btn-danger glyphicon glyphicon-remove pull-right ingredient-remove-button"></span>
+
+                        </div>
+                    </div>
+                </div>
+                <div ng-click="model.addIngredientRow()"
+                     class="btn btn-primary btn-block">
+                    Add Ingredient
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+                <div class="form-group">
+                    <label for="directions">Directions</label>
+                    <textarea ng-model="model.recipe.directions"
+                              rows="5"
+                              id="directions"
+                              class="form-control ajc-light-border"
+                              placeholder="Lorem ipsum dolor sit amet..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <a  ng-click="model.updateRecipe()"
+            class="btn btn-block btn-success">
+            <!--href="#/user/{{model.uid}}/recipe/{{model.rid}}">-->
+            Save Changes
+        </a>
+        <a  ng-click="model.deleteRecipe()"
+            class="btn btn-block btn-danger">
+            <!--href="#/user/{{model.uid}}/recipe/recipe-book">-->
+            Delete
+        </a>
+
+
+
+    </form>
+</div>
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

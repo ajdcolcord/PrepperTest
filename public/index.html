@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Prepper">
+<head>
+    <meta charset="UTF-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="viewport" content="initial-scale=1.25, user-scalable=no">
+    <meta name="description" content="Recipe book and task manager for kitchens and restaurants" />
+    <meta property="og:title" content="Prepper" />
+    <meta property="og:description" content="Recipe book and task manager for kitchens and restaurants" />
+    <meta property="og:image" content="img/P.png" />
+    <link rel="shortcut icon" href="img/P.png" type="image/x-icon" />
+
+    <title>Prepper</title>
+
+
+    <!--DEVELOPMENT---------------------------------------------------------------------->
+    <!--<link rel="stylesheet" href="../angular-1.5.6/docs/components/bootstrap-3.1.1/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" href="../angular-1.5.6/docs/components/bootstrap-3.1.1/css/paper.min.css">-->
+    <!------------------------------------------------------------------------------------------>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/paper/bootstrap.min.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/angular-ui-switch.min.css"/>
+    <link rel="stylesheet" href="css/styles.css">
+
+
+    <!--DEVELOPMENT---------------------------------------------------------------------->
+    <!--<script src="../angular-1.5.6/angular.min.js"></script>-->
+    <!--<script src="../angular-1.5.6/angular-route.min.js"></script>-->
+    <!------------------------------------------------------------------------------------------>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+    <script src="js/jquery.ui.touch-punch.min.js"></script>
+    <script src="js/angular-ui-switch.min.js"></script>
+
+    <script src="directives/ajc-directives.js"></script>
+    <script src="directives/dirPagination.js"></script>
+
+    <script src="app.js"></script>
+    <script src="config.js"></script>
+
+    <script src="views/user/login.controller.client.js"></script>
+    <script src="views/user/register.controller.client.js"></script>
+    <script src="views/user/employee-profile.controller.client.js"></script>
+    <script src="views/user/employee-profile-edit.controller.client.js"></script>
+
+    <script src="views/recipe/recipe-book.controller.client.js"></script>
+    <script src="views/recipe/recipe-edit.controller.client.js"></script>
+    <script src="views/recipe/recipe-view.controller.client.js"></script>
+    <script src="views/recipe/recipe-new.controller.client.js"></script>
+    <script src="views/recipe/recipe-search.controller.client.js"></script>
+
+    <script src="views/prep/prep-list.controller.client.js"></script>
+    <script src="views/prep/prep-list.history.controller.client.js"></script>
+
+    <script src="views/timer/timer-list.controller.client.js"></script>
+
+    <script src="services/user.service.client.js"></script>
+    <script src="services/recipe.service.client.js"></script>
+    <script src="services/prep.service.client.js"></script>
+    <script src="services/timer.service.client.js"></script>
+    <script src="services/food2fork.service.client.js"></script>
+
+</head>
+<body>
+    <div ng-view></div>
+</body>
+</html>

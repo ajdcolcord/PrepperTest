@@ -1,0 +1,95 @@
+<header>
+    <nav class="navbar navbar-default navbar-fixed-top"
+         ng-class="model.user.manager && 'ajc-manager' || ''">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-text navbar-left pull-left navbar-button">
+                    <a href="#/user/{{model.uid}}/recipe/new"
+                       class="navbar-link">
+                        <span class="glyphicon glyphicon-chevron-left ajc-nav-glyphicon"></span>
+                    </a>
+                </p>
+                <a class="navbar-brand">
+                    Find a Recipe
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<div class="container-fluid ajc-body-padded">
+
+    <div ng-if="model.error"
+         class="alert alert-danger">
+        {{model.error}}
+    </div>
+
+    <form class="input-group">
+        <input ng-model="searchText"
+               type="text"
+               id="searchInput"
+               class="form-control"
+               placeholder="Search recipes...">
+        <span class="input-group-btn">
+            <button ng-click="model.searchRecipes(searchText)"
+               class="btn btn-default"
+               type="submit">
+                <span class="glyphicon glyphicon-search"></span>
+            </button>
+        </span>
+    </form>
+
+    <p class="ajc-searching">
+        {{model.searching}}
+        <i ng-if="model.searching == 'searching '"
+           class="fa fa-circle-o-notch fa-spin fa-1x fa-fw"></i>
+    </p>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <ul class="list-group">
+                <li class="list-group-item"
+                    ng-repeat="recipe in model.recipes">
+                    <img ng-src="{{recipe.image_url}}"
+                         class="ajc-recipe-image"/>
+                    <a  ng-click="model.selectRecipe(recipe.recipe_id)">
+                        <b>{{recipe.title}}</b>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div ng-if="model.selectedRecipe != null"
+             class="col-sm-6">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <img ng-src="{{model.selectedRecipe.image_url}}"
+                                 class="ajc-recipe-image ajc-recipe-image-big"/>
+                        </div>
+                        <div class="col-xs-6">
+                            <span ng-click="model.addRecipe(model.selectedRecipe)"
+                                  ng-if="model.uid && model.active"
+                                  class="btn btn-success glyphicon glyphicon-plus-sign pull-right"></span>
+                        </div>
+                    </div>
+                    <h3>{{model.selectedRecipe.title}}</h3>
+                    <ul class="list-group">
+                        <li class="list-group-item"
+                            ng-repeat="ingredient in model.selectedRecipe.ingredients track by $index">
+                            {{ingredient}}
+                        </li>
+                    </ul>
+                    <a href="{{model.selectedRecipe.source_url}}"
+                       target="_blank">
+                        Source
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<footer ng-include src="'views/general/bottomNav.html'"></footer>

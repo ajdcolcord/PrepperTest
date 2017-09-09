@@ -1,0 +1,35 @@
+<nav class="navbar navbar-default navbar-fixed-bottom"
+     ng-class="model.user.manager && 'ajc-manager' || ''">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <p class="navbar-text col-xs-3 ajc-nav-column-centered bottom-button">
+                <a href="#/user/{{model.user._id}}/recipe/recipe-book"
+                   class="navbar-link btn btn-default btn-bottom-color"
+                   ng-class="model.navButton == 'recipe' ? 'selected-nav-button' : ''">
+                    <span class="glyphicon glyphicon glyphicon glyphicon-book"></span>
+                </a>
+            </p>
+            <p class="navbar-text col-xs-3 ajc-nav-column-centered bottom-button">
+                <a href="#/user/{{model.user._id}}/prep/prep-list"
+                   class="navbar-link btn btn-default btn-bottom-color"
+                   ng-class="model.navButton == 'prep' ? 'selected-nav-button' : ''">
+                    <span class="glyphicon glyphicon glyphicon-list-alt"></span>
+                </a>
+            </p>
+            <p class="navbar-text col-xs-3 ajc-nav-column-centered bottom-button">
+                <a href="#user/{{model.user._id}}/recipe/new/search"
+                   class="navbar-link btn btn-default btn-bottom-color"
+                   ng-class="model.navButton == 'search' ? 'selected-nav-button' : ''">
+                    <span class="glyphicon glyphicon-search"></span>
+                </a>
+            </p>
+            <p class="navbar-text col-xs-3 ajc-nav-column-centered bottom-button">
+                <a href="#/user/{{model.user._id}}"
+                   class="navbar-link btn btn-default btn-bottom-color"
+                   ng-class="model.navButton == 'user' ? 'selected-nav-button' : ''">
+                    <span class="glyphicon glyphicon-user"></span>
+                </a>
+            </p>
+        </div>
+    </div>
+</nav>
