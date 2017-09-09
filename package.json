@@ -4,6 +4,8 @@
   "description": "Node.js sample app for OpenShift 3",
   "main": "server.js",
   "dependencies": {
+    "angular-ui-switch": "^0.1.1",
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.18.0",
     "chai": "^3.5.0",
     "chai-http": "^2.0.1",
@@ -15,14 +17,12 @@
     "mongodb": "^2.1.16",
     "mongoose": "^4.11.10",
     "morgan": "^1.7.0",
+    "multer": "^1.1.0",
     "object-assign": "4.1.0",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0",
-    "angular-ui-switch": "^0.1.1",
-    "bcrypt-nodejs": "0.0.3",
-    "multer": "^1.1.0",
     "passport-facebook": "^2.1.1",
-    "passport-google-oauth": "^1.0.0"
+    "passport-google-oauth": "^1.0.0",
+    "passport-local": "^1.0.0"
   },
   "engine": {
     "node": "*",
