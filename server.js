@@ -1,8 +1,7 @@
 //  OpenShift sample Node application
 var express  = require('express'),
     app      = express(),
-    morgan   = require('morgan'),
-    mongoose = require('mongoose');
+    morgan   = require('morgan');
     
 Object.assign=require('object-assign');
 
@@ -42,7 +41,7 @@ var initDb = function(callback) {
   var mongodb = require('mongodb');
   if (mongodb == null) return;
 
-  mongoose.connect(mongoURL, function(err, conn) {
+  mongodb.connect(mongoURL, function(err, conn) {
     if (err) {
       callback(err);
       return;
